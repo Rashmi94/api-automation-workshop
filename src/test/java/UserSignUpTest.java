@@ -1,23 +1,21 @@
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import clients.UserClient;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.UUID;
 
 public class UserSignUpTest extends BaseAPITest {
 
     @Test
     public void successfulRegistration() {
         String signupEndpointResource = "/api/auth/signup";
-        String email = "testrashmi1@mail.com";
-        String password = "testvagrant";
+        String email = UUID.randomUUID()+"@mail.com";
+        String password = "1234567890";
 
-        String signupRequestBody = String.format("{\"email\":\"%s\",\"password\" : \"%s\"}",email, password);
+        UserClient userClient = new UserClient();
+        Response response = userClient.createUser(email,password);
 
-
-        Response response = RestAssured.given()
-                .contentType(ContentType.JSON)
-                .body(signupRequestBody).when().post(signupEndpointResource);
         int statusCode = response.getStatusCode();
         String authenticatedEmail = response.jsonPath().get("data.user.email");
         String role = response.jsonPath().get("data.user.role");
