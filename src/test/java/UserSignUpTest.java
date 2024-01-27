@@ -15,7 +15,7 @@ public class UserSignUpTest extends BaseAPITest {
         String signupRequestBody = String.format("{\"email\":\"%s\",\"password\" : \"%s\"}",email, password);
 
 
-        Response response = RestAssured.given().baseUri(RestAssured.baseURI)
+        Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(signupRequestBody).when().post(signupEndpointResource);
         int statusCode = response.getStatusCode();
@@ -23,10 +23,10 @@ public class UserSignUpTest extends BaseAPITest {
         String role = response.jsonPath().get("data.user.role");
         String accessToken = response.jsonPath().get("data.session.access_token");
 
-        Assert.assertEquals(statusCode,201,"Invalid username or password");
-        Assert.assertEquals(authenticatedEmail,email,"incorrect email");
-        Assert.assertEquals(role,"authenticated","failed to validate the role to be authenticated");
-        Assert.assertNotNull(accessToken);
+        Assert.assertEquals(statusCode,201,"Expected HTTP status code 201 for successful registration but got " + statusCode);
+        Assert.assertEquals(authenticatedEmail,email,"Expected the registered email to match the email used for signup but found " + authenticatedEmail);
+        Assert.assertEquals(role,"authenticated","Expected the role of the user to be 'authenticated' after signup but found " + role);
+        Assert.assertNotNull(accessToken,"Expected a non-null access token after successful registration but found it to be null");
 
     }
 }

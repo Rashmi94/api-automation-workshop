@@ -5,7 +5,7 @@ import utilities.PropertyFileUtils;
 public class BaseAPITest {
 
     @BeforeClass
-    public static void setup() {
+    public void setup() {
         // Base URL fetch from property file
         String BASE_URL = PropertyFileUtils.getProperty("base.url");
 
